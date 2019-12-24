@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.video.mapper.UserTopicRelationMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.user.UserTopicRelationEntity">
+		select * from user_topic_relation where user_topic_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.user.UserTopicRelationEntity">
+		select * from user_topic_relation where 1=1
+		<if test="userId != null">
+			and user_id =#{userId} 
+		</if>
+		<if test="topicId != null">
+			and topic_id =#{topicId} 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_topic_relation 
+	</select>
+	 
+	<insert id="save" parameterType="com.allpai.entity.user.UserTopicRelationEntity">
+		insert into user_topic_relation
+		(
+			`user_topic_id`, 
+			`user_id`, 
+			`topic_id`, 
+			`type`, 
+			`total_num`, 
+			`create_time`
+		)
+		values
+		(
+			#{userTopicId}, 
+			#{userId}, 
+			#{topicId}, 
+			#{type}, 
+			#{totalNum}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.user.UserTopicRelationEntity">
+		update user_topic_relation 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="topicId != null">`topic_id` = #{topicId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="totalNum != null">`total_num` = #{totalNum}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where user_topic_id = #{userTopicId}
+	</update>
+	
+	<delete id="delete">
+		delete from user_topic_relation where user_topic_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_topic_relation where user_topic_id in 
+		<foreach item="userTopicId" collection="array" open="(" separator="," close=")">
+			#{userTopicId}
+		</foreach>
+	</delete>
+
+</mapper>

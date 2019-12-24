@@ -1,0 +1,31 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: ap-zull
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8081/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+      prefer-ip-address: true
+      ip-address: 127.0.0.1
+zuul:
+  routes:
+
+    ap-music-service: /music/**
+    ap-user-service: /user/**
+    ap-video-service: /video/**
+    ap-registry: /registry/**
+  ignored-services: "*"
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+#zuul:
+#  prefix: /api
+#  routes:
+#   item-service: /item/**

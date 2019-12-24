@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ap-common" />
+        <module name="ap-interface" />
+        <module name="ap-music-service" />
+        <module name="ap-rabbit" />
+        <module name="ap-registry" />
+        <module name="ap-service-user" />
+        <module name="ap-topic-service" />
+        <module name="ap-user-interface" />
+        <module name="ap-user-service" />
+        <module name="ap-video-service" />
+        <module name="ap-zull" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="allpai" target="1.8" />
+      <module name="ap-common" target="1.8" />
+      <module name="ap-interface" target="1.8" />
+      <module name="ap-music-service" target="1.8" />
+      <module name="ap-rabbit" target="1.8" />
+      <module name="ap-registry" target="1.8" />
+      <module name="ap-service" target="1.8" />
+      <module name="ap-service-user" target="1.8" />
+      <module name="ap-topic-service" target="1.8" />
+      <module name="ap-user" target="1.8" />
+      <module name="ap-user-entity" target="1.8" />
+      <module name="ap-user-interface" target="1.8" />
+      <module name="ap-user-service" target="1.8" />
+      <module name="ap-video-interface" target="1.8" />
+      <module name="ap-video-service" target="1.8" />
+      <module name="ap-zull" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

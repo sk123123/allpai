@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.video.mapper.VideoInfoMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.VideoInfoEntity">
+		select * from video_info where video_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.VideoInfoEntity">
+		select * from video_info where 1=1
+		<if test="storeType != null ">
+			and store_type =#{storeType}
+		</if>
+		<if test="userId != null ">
+			and user_id =#{userId}
+		</if>
+		<if test="seeAuth != null ">
+			and see_auth =#{seeAuth}
+		</if>
+		order by create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTotal" resultType="int">
+		select count(*) from video_info  where 1=1
+		<if test="storeType != null ">
+			and store_type =#{storeType}
+		</if>
+		<if test="userId != null ">
+			and user_id =#{userId}
+		</if>
+	</select>
+
+	<select id="queryListByVideoIds" resultType="com.allpai.entity.VideoInfoEntity">
+		select * from video_info where video_id in
+		<foreach item="videoId" collection="array" open="(" separator="," close=")">
+			#{videoId}
+		</foreach>
+	</select>
+
+	<select id="queryLikeList" resultType="com.allpai.entity.dto.VideoInfoDto">
+		  select vi.* ,
+		  IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id),0) commentNum
+		  from user_video_relation uv left join video_info vi on uv.video_id = vi.video_id
+		  where uv.type = 1 and uv.user_id= #{userId}  and  vi.video_id is not null
+		  order by uv.create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryLikeTotal" resultType="int">
+		select count(*) from video_info  where 1=1
+		<if test="userId != null ">
+			and video_id in (select video_id from user_video_relation where type =1 and user_id =#{userId}  )
+		</if>
+	</select>
+
+
+	<!-- 查找关注视频列表-->
+	<select id="queryLooklist" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		 from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.store_type = 1 and vi.see_auth = 1
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		and vi.user_id in (select uur.to_user_id  from user_user_relation uur where uur.user_id = #{userId} and uur.type = 1)
+		order by vi.create_time desc,vi.hot_num desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="queryLookTotal" resultType="int">
+		select count(*) from video_info vi  where store_type = 1
+		<if test="userId != null ">
+			and vi.user_id !=#{userId}
+		</if>
+		and vi.user_id in (select uur.to_user_id  from user_user_relation uur where uur.user_id = #{userId} and uur.type = 1)
+	</select>
+
+	<!-- 查找热门视频列表 -->
+	<select id="queryHotlist" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		 from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.store_type = 1 and vi.see_auth = 1
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		order by vi.hot_num desc,vi.video_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查找普通视频列表 -->
+	<select id="queryCommonList" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		 from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.store_type = 1 and vi.see_auth = 1  and vi.hot_num &lt; 500  and vi.hot_num > 0
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		order by vi.hot_num
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查找最新视频列表 -->
+	<select id="queryNewList" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		 from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.store_type = 1 and vi.see_auth = 1  and vi.hot_num =0
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		order by vi.video_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<!-- 根据时间查询视频列表 -->
+	<select id="queryTimeList" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		 from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.store_type = 1 and vi.see_auth = 1
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		<if test="time != null ">
+			and vi.create_time > #{time}
+		</if>
+		order by vi.hot_num desc,vi.video_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTimeTotal" resultType="int">
+		select count(*) from video_info vi where vi.store_type = 1 and vi.see_auth = 1
+		<if test="userId != null ">
+			and user_id != #{userId}
+		</if>
+		<if test="time != null ">
+			and create_time > #{time}
+		</if>
+	</select>
+
+	<select id="queryVideoShareInfo" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.video_id = #{videoId}
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryVideoDetailInfo" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.video_id = #{videoId}
+	</select>
+
+	<insert id="save" parameterType="com.allpai.entity.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoId">
+		insert into video_info
+		(
+			`user_id`,
+			`cover`,
+			`content`,
+			`place`,
+			`see_auth`,
+			`video_url`,
+			`store_type`,
+			`share_num`,
+			`good_num`,
+			`hot_num`,
+			`vod_video_id`,
+			`music_name`,
+			`water_video_url`,
+			`last_time`,
+			`create_time`
+		)
+		values
+		(
+			#{userId},
+			#{cover},
+			#{content},
+			#{place},
+			#{seeAuth},
+			#{videoUrl},
+			#{storeType},
+			#{shareNum},
+			#{goodNum},
+			#{hotNum},
+			#{vodVideoId},
+			#{musicName},
+			#{waterVideoUrl},
+			#{lastTime},
+			#{createTime}
+		)
+	</insert>
+
+	<insert id="saveBase" parameterType="com.allpai.entity.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoId">
+		insert into video_info
+		(
+			`user_id`,
+			`cover`,
+			`content`,
+			`topic_id`,
+			`place`,
+			`see_auth`,
+			`video_url`,
+			`store_type`,
+			`vod_video_id`,
+			`music_name`,
+			`place_detail`,
+			`last_time`,
+			`create_time`
+		)
+		values
+		(
+			#{userId},
+			#{cover},
+			#{content},
+			#{topicId},
+			#{place},
+			#{seeAuth},
+			#{videoUrl},
+			#{storeType},
+			#{vodVideoId},
+			#{musicName},
+			#{placeDetail},
+			#{lastTime},
+			#{createTime}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.allpai.entity.VideoInfoEntity">
+		update video_info
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="cover != null">`cover` = #{cover}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="place != null">`place` = #{place}, </if>
+			<if test="seeAuth != null">`see_auth` = #{seeAuth}, </if>
+			<if test="videoUrl != null">`video_url` = #{videoUrl}, </if>
+			<if test="storeType != null">`store_type` = #{storeType}, </if>
+			<if test="shareNum != null">`share_num` = #{shareNum}, </if>
+			<if test="goodNum != null">`good_num` = #{goodNum}, </if>
+			<if test="hotNum != null">`hot_num` = #{hotNum}, </if>
+			<if test="lastTime != null">`last_time` = #{lastTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where video_id = #{videoId}
+	</update>
+
+	<update id="updateByVod" parameterType="com.allpai.entity.VideoInfoEntity">
+		update video_info
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="cover != null">`cover` = #{cover}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="place != null">`place` = #{place}, </if>
+			<if test="seeAuth != null">`see_auth` = #{seeAuth}, </if>
+			<if test="videoUrl != null">`video_url` = #{videoUrl}, </if>
+			<if test="storeType != null">`store_type` = #{storeType}, </if>
+			<if test="shareNum != null">`share_num` = #{shareNum}, </if>
+			<if test="goodNum != null">`good_num` = #{goodNum}, </if>
+			<if test="lastTime != null">`last_time` = #{lastTime}, </if>
+			<if test="waterVideoUrl != null">`water_video_url` = #{waterVideoUrl}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where vod_video_id = #{vodVideoId}
+	</update>
+
+	<delete id="delete">
+		delete from video_info where video_id = #{value}
+	</delete>
+
+	<delete id="deleteBatch">
+		delete from video_info where video_id in
+		<foreach item="videoId" collection="array" open="(" separator="," close=")">
+			#{videoId}
+		</foreach>
+	</delete>
+
+	<select id="getGoogNumTotal" resultType="long" parameterType="long">
+		select IFNULL(sum(good_num),0) from video_info where user_id =#{userId};
+	</select>
+
+	<select id="queryTopicVideoList" resultType="com.allpai.entity.dto.VideoTopicInfoDto">
+		<!-- select * from video_info where topic_id = #{topicId} -->
+		select t1.video_id videoId,t1.topic_id topicId,t1.user_id userId, t1.cover cover,t1.good_num goodNum,t1.hot_num hotNum,t1.video_url videoUrl,t1.create_time createTime
+		from video_info t1
+        where t1.topic_id = #{topicId}
+		<if test="listType != null and listType == 0">
+			order by t1.hot_num desc
+		</if>
+		<if test="listType != null and listType == 1">
+			order by t1.create_time desc
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTopicVideoTotal" resultType="int">
+		select count(*) from video_info  where topic_id = #{topicId}
+	</select>
+
+	<!-- 视频搜索 -->
+	<select id="queryVideoSearchList" resultType="com.allpai.entity.vo.VideoSearchOutVo">
+		select vi.*,
+		ui.nick_name nickName,ui.head_url headUrl,
+		<if test="userId != null ">
+			IFNULL((select 1 from user_video_relation  uvr where uvr.video_id =vi.video_id and  uvr.user_id = #{userId} and uvr.type =1 ) ,0) type,
+		</if>
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id),0) commentNum
+		from video_info vi
+		LEFT JOIN user_info ui on vi.user_id = ui.user_id
+		where vi.content like  concat ('%' ,#{content}, '%')  and vi.see_auth = 1
+		order by vi.hot_num desc,vi.video_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 视频搜索 统计 -->
+	<select id="queryVideoSearchListTotal" resultType="int">
+		select count(*) from video_info vi LEFT JOIN user_info ui on vi.user_id = ui.user_id
+		where vi.content like  concat ('%' ,#{content}, '%')  and vi.see_auth = 1
+	</select>
+
+	<!-- 根据输入标题对用户搜索 -->
+	<!-- <select id="queryUserSearchOutVo" resultType="com.allpai.entity.vo.UserSearchOutVo">
+		select DISTINCT t4.*,IFNULL(t5.type,0) type from (select t1.user_id userId,t1.nick_name nickName,t1.head_url headUrl,
+		t1.user_num userNum,t1.fans_num fansNum,
+		(select count(*) from video_info t2 where t1.user_id =t2.user_id) workNum ,
+		(select IFNULL(sum(good_num),0) from video_info t3 where t1.user_id =t3.user_id) goodNum
+		from user_info t1 where t1.nick_name like  concat ('%' ,#{content}, '%')  ) t4 left join user_user_relation t5 on t5.to_user_id =t4.userId
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select> -->
+	<!-- 查询用户的Total -->
+	<!-- <select id="queryUserSearchTotal" resultType="int">
+		select count(*) from (select * from user_info  where nick_name like  concat ('%' ,#{content}, '%')) t4
+		left join user_user_relation t5 on t5.to_user_id =t4.user_id
+	</select> -->
+
+
+	<!-- 根据输入标题对话题搜索 -->
+	<select id="queryTopicSearchOutVo" resultType="com.allpai.entity.vo.TopicSearchOutVo">
+		select topic_id topicId,topic_title topicTitle ,partake_num partakeNum
+		from video_topic where topic_title like concat ('%' ,#{content}, '%')
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 查询标题的Total -->
+	<select id="queryTopicSearchTotal" resultType="int">
+		select count(*) from video_topic where topic_title like concat ('%' ,#{content}, '%')
+	</select>
+
+	<!-- 查找范围视频列表 -->
+	<select id="queryRangeList" resultType="com.allpai.entity.dto.VideoInfoDto">
+		select *,
+		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
+		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
+		IFNULL((select topic_title from video_topic vt where vt.topic_id = vi.topic_id),'')  topicTitle,
+		IFNUll((select 1 from user_user_relation uu where uu.type =1 and uu.user_id = #{userId} and uu.to_user_id = vi.user_id),0) attent,
+		IFNUll((select 1 from user_video_relation uv where uv.type = 1 and uv.user_id = #{userId} and uv.video_id = vi.video_id),0) good
+		 from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.store_type = 1 and  vi.video_id in (${videoIds})
+		<if test="userId != null ">
+			and vi.user_id != #{userId}
+		</if>
+		order by vi.video_id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<!--  主页热词搜索 -->
+	<select id="queryHomePageHotSearchOutVo" resultType="com.allpai.entity.vo.HomePageHotSearchOutVo">
+		select search_word  content from user_search_word where  search_word  like concat ('%' ,#{content}, '%')
+		order by hot_num  desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查询此用户ID是否参与话题-->
+	<select id="findVideobyTopicUserId"  resultType="com.allpai.entity.VideoInfoEntity">
+		select  *  from video_info where user_id = #{userId} and topic_id = #{topicId} limit 0,1;
+	</select>
+
+</mapper>

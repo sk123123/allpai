@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ap-ribbit
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+#eureka:
+#  client:
+#    service-url:
+#      DefaultZone: http://localhost:8081/eureka
+#    fetch-registry: true
+#  instance:
+#    ip-address: 127.0.0.1

@@ -1,0 +1,26 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: ap-video-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/allpai
+    username: root
+    password: sk123123
+    driver-class-name: com.mysql.jdbc.Driver
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8081/eureka
+mybatis:
+  config-location: classpath:mybatis.xml
+  type-aliases-package: com.allpai.video.entity
+  #对应编译路径
+  mapper-locations: classpath*:mapper/*.xml
+##---------------------------------日志处理
+debug: true
+logging:
+  level:
+    org.springframework.web: debug
+    com.allpai.user: debug
+    org.springframework.boot.autoconfigure: ERROR

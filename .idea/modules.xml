@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/allpai.iml" filepath="$PROJECT_DIR$/allpai.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-common/ap-common.iml" filepath="$PROJECT_DIR$/ap-common/ap-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-service/ap-interface/ap-interface.iml" filepath="$PROJECT_DIR$/ap-service/ap-interface/ap-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-service/ap-music-service/ap-music-service.iml" filepath="$PROJECT_DIR$/ap-service/ap-music-service/ap-music-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-rabbit/ap-rabbit.iml" filepath="$PROJECT_DIR$/ap-rabbit/ap-rabbit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-registry/ap-registry.iml" filepath="$PROJECT_DIR$/ap-registry/ap-registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-service/ap-service.iml" filepath="$PROJECT_DIR$/ap-service/ap-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-service/ap-user-service/ap-user-service.iml" filepath="$PROJECT_DIR$/ap-service/ap-user-service/ap-user-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-service/ap-video-service/ap-video-service.iml" filepath="$PROJECT_DIR$/ap-service/ap-video-service/ap-video-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ap-zull/ap-zull.iml" filepath="$PROJECT_DIR$/ap-zull/ap-zull.iml" />
+    </modules>
+  </component>
+</project>

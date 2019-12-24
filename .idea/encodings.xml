@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-rabbit" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-registry" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-service/ap-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-service/ap-music-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-service/ap-user-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-service/ap-video-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ap-zull" charset="UTF-8" />
+  </component>
+</project>

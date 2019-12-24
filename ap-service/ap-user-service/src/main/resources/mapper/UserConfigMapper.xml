@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.user.mapper.UserConfigMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.user.UserConfigEntity">
+		select * from user_config where config_id = #{value}
+	</select>
+	
+	<select id="queryObjectByUserId" resultType="com.allpai.entity.user.UserConfigEntity">
+		select * from user_config where user_id = #{userId}
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.user.UserConfigEntity">
+		select * from user_config 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_config 
+	</select>
+	 
+	<insert id="save" parameterType="com.allpai.entity.user.UserConfigEntity">
+		insert into user_config
+		(
+			`config_id`, 
+			`user_id`, 
+			`like_notify`, 
+			`look_notify`, 
+			`comment_notify`, 
+			`chat_notify`,
+			`wifi_play`,
+			`read_comment_time`,
+			`create_time`
+		)
+		values
+		(
+			#{configId}, 
+			#{userId}, 
+			#{likeNotify}, 
+			#{lookNotify}, 
+			#{commentNotify}, 
+			#{chatNotify},
+			#{wifiPlay},  
+			#{readCommentTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.user.UserConfigEntity">
+		update user_config 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="likeNotify != null">`like_notify` = #{likeNotify}, </if>
+			<if test="lookNotify != null">`look_notify` = #{lookNotify}, </if>
+			<if test="commentNotify != null">`comment_notify` = #{commentNotify}, </if>
+			<if test="chatNotify != null">`chat_notify` = #{chatNotify}, </if>
+			<if test="wifiPlay != null">`wifi_play` = #{wifiPlay}, </if>
+			<if test="readCommentTime != null">`read_comment_time` = #{readCommentTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where config_id = #{configId}
+	</update>
+	
+	<delete id="delete">
+		delete from user_config where config_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_config where config_id in 
+		<foreach item="configId" collection="array" open="(" separator="," close=")">
+			#{configId}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.video.mapper.VideoCommentMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.VideoCommentEntity">
+		select * from video_comment where comment_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.VideoCommentEntity">
+		select * from video_comment 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from video_comment 
+	</select>
+	
+	<select id="queryParentList" resultType="com.allpai.entity.dto.VideoCommentDto">
+		select *,ui.nick_name nickName,ui.head_url headUrl, 
+		IFNUll((select 1 from user_comment_relation uc where uc.user_id = #{userId} and uc.comment_id = vc.comment_id),0) good
+		from video_comment vc left join user_info ui on vc.user_id = ui.user_id where 1 = 1
+		<if test="videoId != null">
+			and vc.video_id = #{videoId}
+		</if>	
+		<if test="parentId != null">
+			and vc.parent_id = #{parentId} 
+		</if>
+		order by comment_id desc	
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryParentTotal" resultType="int">
+		select count(*) from video_comment where 1 = 1
+		<if test="videoId != null">
+			and video_id = #{videoId}
+		</if>
+		<if test="parentId != null">
+			and parent_id = #{parentId} 
+		</if>	
+	</select>
+	
+	<select id="querySonList" resultType="com.allpai.entity.dto.VCommentSonDto">
+		select * ,u1.nick_name nickName,u2.nick_name toNickName from video_comment vc 
+		left join user_info u1 on vc.user_id = u1.user_id  
+		left join user_info u2 on vc.to_user_id = u2.user_id
+		where 1 = 1
+		<if test="videoId != null">
+			and video_id = #{videoId} 
+		</if>	
+		<if test="parentId != null">
+			and parent_id = #{parentId} 
+		</if>
+		order by comment_id desc			
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="querySonTotal" resultType="int">
+		select count(*) from video_comment where 1 = 1
+		<if test="videoId != null">
+			and video_id = #{videoId}
+		</if>
+		<if test="parentId != null">
+			and parent_id = #{parentId} 
+		</if>	
+	</select>
+	
+	<select id="queryUserCommentList"  resultType="com.allpai.entity.dto.UserCommentDto">
+		select * ,u1.nick_name nickName,u2.nick_name toNickName,
+		u1.head_url headUrl ,vi.cover cover,vc.video_id videoId,
+		vi.user_id videoUserId
+		 from video_comment vc 
+		left join user_info u1 on vc.user_id = u1.user_id  
+		left join user_info u2 on vc.to_user_id = u2.user_id
+		left join video_info vi on  vc.video_id = vi.video_id
+		where  vc.to_user_id = #{userId} 
+		order by vc.create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		
+	</select>
+	
+	<select id="queryUserCommentTotal" resultType="int">
+		select count(*) from video_comment 
+		where  to_user_id = #{userId} 
+	</select>
+	 
+	<insert id="save" parameterType="com.allpai.entity.VideoCommentEntity" useGeneratedKeys="true" keyProperty="commentId">
+		insert into video_comment
+		(
+			`user_id`, 
+			`video_id`, 
+			`content`, 
+			`parent_id`, 
+			`good_num`, 
+			`to_user_id`, 
+			`create_time`
+		)
+		values 
+		(
+			#{userId}, 
+			#{videoId}, 
+			#{content}, 
+			#{parentId}, 
+			#{goodNum},
+			#{toUserId},  
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.VideoCommentEntity">
+		update video_comment 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="videoId != null">`video_id` = #{videoId}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="goodNum != null">`good_num` = #{goodNum}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where comment_id = #{commentId}
+	</update>
+	
+	<delete id="delete">
+		delete from video_comment where comment_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from video_comment where comment_id in 
+		<foreach item="commentId" collection="array" open="(" separator="," close=")">
+			#{commentId}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteSonsBatch">
+		delete from video_comment where parent_id in 
+		<foreach item="commentId" collection="array" open="(" separator="," close=")">
+			#{commentId}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteByVideoIds">
+		delete from video_comment where video_id in 
+		<foreach item="videoId" collection="array" open="(" separator="," close=")">
+			#{videoId}
+		</foreach>
+	</delete>
+	
+	<select id="findCommentNoReadNum" resultType="int">
+		select count(*) from video_comment where to_user_id =#{userId} and create_time > IFNULL((select read_comment_time from user_config where user_id=#{userId} ),0);
+	</select>
+
+</mapper>

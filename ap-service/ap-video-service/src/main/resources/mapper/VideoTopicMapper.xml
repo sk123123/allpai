@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.video.mapper.VideoTopicMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.VideoTopicInfoEntity">
+		select * from video_topic where topic_id = #{value}
+	</select>
+	
+	<select id="queryObjectList" resultType="com.allpai.entity.vo.VideoHotTopicRankOutVo">
+		select partake_num,topic_title,topic_id from video_topic order by hot_num
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.VideoTopicInfoEntity">
+		select * from video_topic 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from video_topic 
+	</select>
+	<select id="topicTitleTotal" resultType="int">
+		select count(*) from video_topic where topic_title = #{topicTitle}
+	</select>
+	 
+	<insert id="save" parameterType="com.allpai.entity.VideoTopicInfoEntity" useGeneratedKeys="true" keyProperty="topicId">
+		insert into video_topic
+		(
+			`topic_id`, 
+			`topic_title`, 
+			`introduce`, 
+			`hot_num`, 
+			`cover`, 
+			`user_id`,
+			`partake_num`,
+			`share_num`,
+			`create_time`
+		)
+		values
+		(
+			#{topicId}, 
+			#{topicTitle}, 
+			#{introduce}, 
+			#{hotNum}, 
+			#{cover}, 
+			#{userId}, 
+			#{partakeNum},
+			#{shareNum},
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.VideoTopicInfoEntity">
+		update video_topic 
+		<set>
+			<if test="topicTitle != null">`topic_title` = #{topicTitle}, </if>
+			<if test="introduce != null">`introduce` = #{introduce}, </if>
+			<if test="hotNum != null">`hot_num` = #{hotNum}, </if>
+			<if test="cover != null">`cover` = #{cover}, </if>
+			<if test="partakeNum != null">`partake_num` = #{partakeNum}, </if>
+			<if test="shareNum != null">`share_num` = #{shareNum}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where topic_id = #{topicId}
+	</update>
+	
+	<delete id="delete">
+		delete from video_topic where topic_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from video_topic where topic_id in 
+		<foreach item="topicId" collection="array" open="(" separator="," close=")">
+			#{topicId}
+		</foreach>
+	</delete>
+	
+	<select id="queryTopicTitleInfo" resultType="com.allpai.entity.dto.VideoTopicInfoDto">
+		select *,ui.head_url headUrl,ui.nick_name nickName from video_topic vt left join user_info ui on vt.user_id = ui.user_id  where  topic_title = #{topicTitle}
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTopicInfo" resultType="com.allpai.entity.dto.TopicInfoDetailDto" >
+		select *,ui.head_url headUrl,ui.nick_name nickName from video_topic vt left join user_info ui on vt.user_id = ui.user_id  where  topic_id = #{topicId}
+	</select>
+	
+	<select id="queryTopicTitleAddInfo" resultType="com.allpai.entity.vo.VideoTopicAddOutVo">
+		select  topic_id topicId,partake_num partakeNum  from video_topic where topic_title = #{topicTitle}
+	</select>
+	
+	<!-- 查找参与话题的人数 -->
+	<select id="queryPartakeNum"  resultType="int">
+		SELECT count(DISTINCT(user_id)) from video_info WHERE topic_id = #{topicId};
+	</select>
+	
+	<!-- 更新话题参与人数 -->
+	<update id="updatePartakeNum" >
+		update video_topic set partake_num = #{partakeNum} WHERE topic_id = #{topicId};
+	</update>
+	
+	
+</mapper>

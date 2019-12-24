@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.user.mapper.UserInfoMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.user.UserInfoEntity">
+		select * from user_info where user_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.user.UserInfoEntity">
+		select * from user_info where 1=1
+		<if test="mobile != null and mobile.trim() != ''">
+			and mobile =#{mobile}
+		</if>
+		<if test="userNum != null and userNum.trim() != ''">
+			and user_num =#{userNum}
+		</if>
+		<if test="qqId != null and qqId.trim() != ''">
+			and qq_id =#{qqId}
+		</if>
+		<if test="wechatId != null and wechatId.trim() != ''">
+			and wechat_id =#{wechatId}
+		</if>
+		<if test="token != null and token.trim() != ''">
+			and token =#{token}
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_info
+	</select>
+
+	<select id="queryLookList" resultType="com.allpai.entity.dto.UserInfoLookDto">
+		select ui.*,
+		(select count(*) from user_user_relation uu1 where uu1.user_id = ui.user_id and type = 1) lookNum,
+		uu.create_time createTime,
+		IFNULL((select count(video_id) from video_info vi where vi.user_id = ui.user_id ),0) workNum
+		 from user_user_relation uu left join user_info ui on uu.to_user_id = ui.user_id where uu.type=1 and uu.user_id = #{userId}
+		 order by uu.create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="queryLookTotal" resultType="int">
+		select count(*) from user_info where 1=1
+		<if test="userId != null">
+			and user_id in
+			(select to_user_id from user_user_relation where  user_id = #{userId} and type = 1)
+		</if>
+	</select>
+
+	<select id="querybackList" resultType="com.allpai.entity.dto.UserInfoBackDto">
+		select *
+		from user_info ui where 1=1
+		<if test="userId != null">
+			and ui.user_id in
+			(select uu.to_user_id from user_user_relation uu where  uu.user_id = #{userId} and uu.type = 2)
+		</if>
+
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="querybackTotal" resultType="int">
+		select count(*) from user_info where 1=1
+		<if test="userId != null">
+			and user_id in
+			(select to_user_id from user_user_relation where  user_id = #{userId} and type = 2)
+		</if>
+	</select>
+
+	<select id="queryUserInfoSelf" resultType="com.allpai.entity.dto.UserInfoSelfDto">
+		select ui.*,
+		(select count(*) from user_user_relation uu1 where uu1.user_id = ui.user_id and type = 1) lookNum,
+		(select count(*) from user_user_relation uu2 where uu2.to_user_id = ui.user_id and type = 1) fansNum,
+		0 commentNew
+		from user_info ui where ui.user_id = #{userId}
+	</select>
+
+	<select id="queryUserInfoOne" resultType="com.allpai.entity.dto.UserInfoOneDto">
+		select ui.* ,
+		(select count(*) from user_user_relation uu1 where uu1.user_id = ui.user_id and type = 1) lookNum,
+		(select count(*) from user_user_relation uu2 where uu2.to_user_id = ui.user_id and type = 1) fansNum
+		from user_info ui where ui.user_id = #{userId}
+	</select>
+
+
+	<insert id="save" parameterType="com.allpai.entity.user.UserInfoEntity" useGeneratedKeys="true" keyProperty="userId">
+		insert into user_info
+		(
+			`user_num`,
+			`nick_name`,
+			`mobile`,
+			`password`,
+			`birthday`,
+			`age`,
+			`sex`,
+			`sign`,
+			`address`,
+			`token`,
+			`wechat_id`,
+			`qq_id`,
+			`sina_id`,
+			`balance`,
+			`last_time`,
+			`fans_num`,
+			`look_num`,
+			`create_time`
+		)
+		values
+		(
+			#{userNum},
+			#{nickName},
+			#{mobile},
+			#{password},
+			#{birthday},
+			#{age},
+			#{sex},
+			#{sign},
+			#{address},
+			#{token},
+			#{wechatId},
+			#{qqId},
+			#{sinaId},
+			#{balance},
+			#{lastTime},
+			#{fansNum},
+			#{lookNum},
+			#{createTime}
+		)
+	</insert>
+
+	<insert id="saveBase" parameterType="com.allpai.entity.user.UserInfoEntity" useGeneratedKeys="true" keyProperty="userId">
+		insert into user_info
+		(
+			`mobile`,
+			`password`,
+			`last_time`,
+			`create_time`
+		)
+		values
+		(
+			#{mobile},
+			#{password},
+			#{lastTime},
+			#{createTime}
+		)
+	</insert>
+
+	<insert id="saveAuth" parameterType="com.allpai.entity.user.UserInfoEntity" useGeneratedKeys="true" keyProperty="userId">
+		insert into user_info
+		(
+			`nick_name`,
+			`sex`,
+			`token`,
+			`wechat_id`,
+			`qq_id`,
+			`sina_id`,
+			`last_time`,
+			`login_time`,
+			`create_time`
+		)
+		values
+		(
+			#{nickName},
+			#{sex},
+			#{token},
+			#{wechatId},
+			#{qqId},
+			#{sinaId},
+			#{lastTime},
+			#{loginTime},
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.user.UserInfoEntity">
+		update user_info 
+		<set>
+			<if test="userNum != null">`user_num` = #{userNum}, </if>
+			<if test="nickName != null">`nick_name` = #{nickName}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="birthday != null">`birthday` = #{birthday}, </if>
+			<if test="age != null">`age` = #{age}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="sign != null">`sign` = #{sign}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="token != null">`token` = #{token}, </if>
+			<if test="wechatId != null">`wechat_id` = #{wechatId}, </if>
+			<if test="qqId != null">`qq_id` = #{qqId}, </if>
+			<if test="sinaId != null">`sina_id` = #{sinaId}, </if>
+			<if test="balance != null">`balance` = #{balance}, </if>
+			<if test="lastTime != null">`last_time` = #{lastTime}, </if>
+			<if test="fansNum != null">`fans_num` = #{fansNum}, </if>
+			<if test="lookNum != null">`look_num` = #{lookNum}, </if>
+			<if test="createTime != null">`create_time` = #{createTime},</if>
+			<if test="loginTime != null">`login_time` = #{loginTime},</if>
+			<if test="headUrl != null">`head_url` = #{headUrl},</if>
+			<if test="commentControl != null">`comment_control` = #{commentControl},</if>
+			<if test="jpushId != null">`jpush_id` = #{jpushId}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	
+	<delete id="delete">
+		delete from user_info where user_id = #{value}
+	</delete>
+
+	<delete id="deleteBatch">
+		delete from user_info where user_id in
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+
+	<update id="clearJpushId" parameterType="string">
+		update user_info set jpush_id = '' where jpush_id=#{jpushId};
+	</update>
+
+	<select id="queryJpushId" resultType="string"  parameterType="long">
+		select jpush_id  from user_info where user_id = #{value}
+	</select>
+
+	<!-- 用户搜索-->
+	<select id="queryUserSearch" resultType="com.allpai.entity.dto.UserSearchDto">
+		select ui.*
+		,(select count(*) from video_info vi where vi.user_id =ui.user_id and vi.see_auth = 1) workNum
+		,(select IFNULL(sum(good_num),0) from video_info vi where vi.user_id =ui.user_id and vi.see_auth = 1) goodNum
+		<if test="userId != null ">
+		,IFNULL((select 1 from user_user_relation uur where uur.user_id = #{userId} and uur.to_user_id = ui.user_id  and uur.type = 1 ),0) type
+		</if>
+		from user_info ui where ui.nick_name like concat ('%' ,#{content}, '%') or ui.user_id = #{content}
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<!-- 用户搜索 统计 -->
+	<select id="queryUserSearchTotal" resultType="int">
+		select count(*) from user_info ui where ui.nick_name  = #{content} or ui.user_id = #{content}
+	</select>
+
+	<select id="queryNumber" resultType="com.allpai.entity.user.UserInfoEntity">
+		select user_id userId,user_num userNum,nick_name nickName,mobile,
+		password,birthday,age,sex,sign,address,token,wechat_id wechatId,
+		qq_id qqId,sina_id sinaId,
+		IFNULL(balance,0.0) balance,
+		IFNULL(look_num,0) lookNum,
+		IFNULL(fans_num,0) fansNum,
+		login_time loginTime,head_url headUrl,comment_control commentControl,
+		source,jpush_id jpushId,last_time lastTime,create_time createTime
+		from user_info where user_id = #{value}
+	</select>
+</mapper>
