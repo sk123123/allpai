@@ -15,6 +15,6 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
     @Bean
     public Queue defaultQueue(){
-        return new Queue("queueName");
+        return new Queue("ceshi");
     }
 }

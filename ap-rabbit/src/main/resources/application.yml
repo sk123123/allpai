@@ -6,6 +6,12 @@ spring:
     port: 5672
     username: guest
     password: guest
+#    template:
+#      exchange: direct
+#    listener:
+#      direct:
+#        consumers-per-queue: queueDirect
+    #设置exchange、queue
 #eureka:
 #  client:
 #    service-url:
