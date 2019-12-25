@@ -1,0 +1,13 @@
+server:
+  port: 5001
+spring:
+  application:
+    name: ap-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:sk123123/springCloud_Config.git
+          search-paths: config-repo
+          username: sk123123
+          password: d4471466
