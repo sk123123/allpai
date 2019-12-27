@@ -51,7 +51,7 @@ public class AESUtils {
 
     public static void main(String[] args) {
 
-        String string = AESUtils.encryptData("deng1991");
+        String string = AESUtils.encryptData("12345678");
         System.out.println("加密后:" +string);
         System.out.println("秘钥:" +KEY);
         System.out.println("解密后:"+AESUtils.decryptData(string));
