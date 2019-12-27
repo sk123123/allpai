@@ -84,7 +84,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.amazonaws:aws-java-sdk-autoscaling:1.11.277" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.amazonaws:aws-java-sdk-sts:1.11.277" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.amazonaws:aws-java-sdk-route53:1.11.277" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.4.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
     <orderEntry type="library" name="Maven: com.netflix.archaius:archaius-core:0.7.6" level="project" />
