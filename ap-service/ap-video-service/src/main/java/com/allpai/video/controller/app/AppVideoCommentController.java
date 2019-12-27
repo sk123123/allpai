@@ -26,7 +26,7 @@ public class AppVideoCommentController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/findCommentNoReadNum")
+    @RequestMapping("/findCommentNoReadNum/{userId}")
     public int findCommentNoReadNum(@PathVariable(value = "userId")Long userId){
         return videoCommentMapper.findCommentNoReadNum(userId);
     }

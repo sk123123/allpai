@@ -8,6 +8,11 @@ spring:
     username: root
     password: sk123123
     driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: true
+  devtools:
+    restart:
+      enabled: true
 eureka:
   client:
     service-url:

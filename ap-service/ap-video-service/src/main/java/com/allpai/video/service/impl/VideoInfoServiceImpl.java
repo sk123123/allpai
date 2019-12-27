@@ -1,5 +1,6 @@
 package com.allpai.video.service.impl;
 
+import com.allpai.common.constant.HotNumType;
 import com.allpai.common.exception.ErrorCode;
 import com.allpai.common.utils.MsgInfo;
 import com.allpai.common.utils.PageUtils;
@@ -264,9 +265,30 @@ public class VideoInfoServiceImpl implements VideoInfoService {
         return null;
     }
 
+    /**
+     * 更新视频热度值
+     * @param type
+     * @param videoId
+     */
     @Override
     public void updateVideoHotnum(int type, Long videoId) {
-
+        if(videoId == null) return;
+        VideoInfoEntity videoInfoEntity = queryObject(videoId);
+        Long hotNum = videoInfoEntity.getHotNum();
+        if(type == HotNumType.LIKE.getCode()){
+            //点赞数
+            videoInfoEntity.setHotNum(hotNum + 1);
+        }else if(type == HotNumType.COMMENT.getCode()){
+            //评论数
+            videoInfoEntity.setHotNum(hotNum + 30);
+        }else if(type == HotNumType.SHARE.getCode()){
+            //转发数
+            videoInfoEntity.setHotNum(hotNum + 200);
+        }else if(type == HotNumType.ATTENT.getCode()){
+            //关注数
+            videoInfoEntity.setHotNum(hotNum + 10);
+        }
+        videoInfoMapper.update(videoInfoEntity);
     }
 
     @Override
