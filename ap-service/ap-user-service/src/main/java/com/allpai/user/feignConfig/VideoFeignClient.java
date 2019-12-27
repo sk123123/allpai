@@ -31,6 +31,6 @@ public interface VideoFeignClient {
     int findCommentNoReadNum(@PathVariable(value = "userId")Long userId);
 
     //根据type更新热度值
-    @RequestMapping(value = "/video/videoinfo/updateVideoHotnum}",method = RequestMethod.GET)
+    @RequestMapping(value = "/video/videoinfo/updateVideoHotnum",method = RequestMethod.GET)
     void updateVideoHotnum(@RequestBody VideoHotnumInVo videoHotnumInVo);
 }

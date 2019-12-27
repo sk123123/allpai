@@ -1,6 +1,7 @@
 package com.allpai.user.feignConfig;
 
 import com.allpai.entity.video.VideoInfoEntity;
+import com.allpai.entity.video.vo.VideoHotnumInVo;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,21 @@ public class ApVideoServiceFallback implements FallbackFactory<VideoFeignClient>
             @Override
             public VideoInfoEntity queryObject(Long videoId) {
                 return null;
+            }
+
+            @Override
+            public Long getGoogNumTotal(Long userId) {
+                return null;
+            }
+
+            @Override
+            public int findCommentNoReadNum(Long userId) {
+                return 0;
+            }
+
+            @Override
+            public void updateVideoHotnum(VideoHotnumInVo videoHotnumInVo) {
+
             }
         };
     }

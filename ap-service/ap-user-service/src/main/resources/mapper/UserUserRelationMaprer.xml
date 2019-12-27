@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.user.mapper.UserUserRelationMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.user.UserUserRelationEntity">
+		select * from user_user_relation where user_user_id = #{value}
+	</select>
+	
+	<select id="queryuserUserId" resultType="Long">
+		select user_user_id from user_user_relation where 1=1
+		<if test="userId !=null">
+			and user_id =#{userId} 
+		</if>
+		<if test="toUserId !=null">
+			and to_user_id =#{toUserId} 
+		</if>
+		<if test="type !=null">
+			and type =#{type} 
+		</if>
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.user.UserUserRelationEntity">
+		select * from user_user_relation where 1=1
+		<if test="userId != null">
+			and user_id =#{userId} 
+		</if>
+		<if test="toUserId != null">
+			and to_user_id =#{toUserId} 
+		</if>
+		<if test="type != null">
+			and type =#{type} 
+		</if>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_user_relation where 1=1
+		<if test="userId != null">
+			and user_id =#{userId} 
+		</if>
+		<if test="toUserId != null">
+			and to_user_id =#{toUserId} 
+		</if>
+	</select>
+	 
+	<insert id="save" parameterType="com.allpai.entity.user.UserUserRelationEntity">
+		insert into user_user_relation
+		(
+			`user_user_id`, 
+			`user_id`, 
+			`to_user_id`, 
+			`type`, 
+			`create_time`
+		)
+		values
+		(
+			#{userUserId}, 
+			#{userId}, 
+			#{toUserId}, 
+			#{type}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.user.UserUserRelationEntity">
+		update user_user_relation 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="toUserId != null">`to_user_id` = #{toUserId}, </if>
+			<if test="lastTime != null">`last_time` = #{lastTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where user_user_id = #{userUserId}
+	</update>
+	
+	<delete id="delete">
+		delete from user_user_relation where user_user_id = #{value}
+	</delete>
+	
+	<delete id="deleteRelation">
+		delete from user_user_relation where user_id = #{userId} and to_user_id = #{toUserId}  
+		<if test="type != null"> and type = #{type} </if>
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_user_relation where user_user_id in 
+		<foreach item="userUserId" collection="array" open="(" separator="," close=")">
+			#{userUserId}
+		</foreach>
+	</delete>
+	
+	<select id="findUpdateFlag" resultType="boolean">
+		select 
+		IF((IFNULL((select max(create_time) from video_info vi where  vi.store_type = 1 and see_auth = 1 and vi.user_id = uu.to_user_id ),0)
+		 >= IFNULL(uu.last_time,0) ),1,0)  
+		from user_user_relation uu where uu.user_id = #{userId} and uu.to_user_id = #{toUserId} and uu.type = 1
+	</select>
+
+</mapper>

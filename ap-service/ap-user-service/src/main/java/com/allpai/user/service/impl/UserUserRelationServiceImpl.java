@@ -15,6 +15,7 @@ import com.allpai.user.mapper.UserUserRelationMapper;
 import com.allpai.user.service.UserConfigService;
 import com.allpai.user.service.UserInfoService;
 import com.allpai.user.service.UserUserRelationService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,8 +77,23 @@ public class UserUserRelationServiceImpl implements UserUserRelationService {
         userUserRelationMapper.deleteBatch(userUserIds);
     }
 
+    /**
+     * 查看用户与用户关系
+     * @param userId
+     * @param toUserId
+     * @param type
+     * @return
+     */
     @Override
     public boolean checkRelation(Long userId, Long toUserId, Integer type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("offset", 0);
+        map.put("limit", 1);
+        map.put("userId", userId);
+        map.put("toUserId", toUserId);
+        map.put("type", type);
+        List<UserUserRelationEntity> list = userUserRelationMapper.queryList(map);
+        if(list != null  && list.size() >0)return true;
         return false;
     }
 
@@ -90,16 +106,15 @@ public class UserUserRelationServiceImpl implements UserUserRelationService {
     @Override
     public R attentUser(UserAttentInVo userAttentInVo, HttpServletRequest request) {
         UserInfoEntity userInfoEntity = SessionUtils.getSessionUser(request);
+        if(userInfoEntity == null || userInfoEntity.getUserId() == null)
+            return R.error(ErrorCode.TokenInvalid);
         Long userId = userInfoEntity.getUserId();
         Long toUserId = userAttentInVo.getUserId();
-        if(userId == null)return R.error(ErrorCode.TokenInvalid);
         if(toUserId == 0)return R.error(ErrorCode.ParamInvalid.getCode(),"userId参数不能为0");
         if(toUserId == null )return R.error(ErrorCode.ParamInvalid.getCode(),"userId参数不能空");
         if(userId == toUserId)return R.error(ErrorCode.InfoError.getCode(),"你不能关注自己哦~");
-        if(userAttentInVo.getType() == 1){
-            //添加关注
+        if(userAttentInVo.getType() == 1){//添加关注
             if(!checkRelation(userId, toUserId,1)){
-                //清楚之前关系 拉黑和关注只能有一个存在
                 deleteRelation(userId, toUserId);
                 UserUserRelationEntity userRelationEntity = new UserUserRelationEntity();
                 userRelationEntity.setUserId(userId);
@@ -132,9 +147,39 @@ public class UserUserRelationServiceImpl implements UserUserRelationService {
         return R.ok(MsgInfo.成功.toString());
     }
 
+    /**
+     * 用户拉黑
+     * @param userAddBlackInVo
+     * @param request
+     * @return
+     */
     @Override
     public R addBlack(UserAddBlackInVo userAddBlackInVo, HttpServletRequest request) {
-        return null;
+        UserInfoEntity userInfoEntity = SessionUtils.getSessionUser(request);
+        if(userInfoEntity == null ||userInfoEntity.getUserId() == null)
+            return R.error(ErrorCode.TokenInvalid);
+        Long userId = userInfoEntity.getUserId();
+        Long toUserId = userAddBlackInVo.getUserId();
+        if(toUserId == null)return R.error(ErrorCode.ParamInvalid.getCode(),"userId参数不能空");
+        if(userAddBlackInVo.getType() == 1){//拉黑
+            if(!checkRelation(userId, toUserId,2)){
+                deleteRelation(userId, toUserId);
+                UserUserRelationEntity userRelationEntity = new UserUserRelationEntity();
+                userRelationEntity.setUserId(userId);
+                userRelationEntity.setToUserId(toUserId);
+                userRelationEntity.setType(2);
+                userRelationEntity.setCreateTime(new Date());
+                save(userRelationEntity);
+            }
+        }else if(userAddBlackInVo.getType() == 0){
+            //取消拉黑
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("userId", userId);
+            map.put("toUserId", toUserId);
+            map.put("type", 2);
+            userUserRelationMapper.deleteRelation(map);
+        }
+        return R.ok(MsgInfo.成功.toString());
     }
 
     @Override

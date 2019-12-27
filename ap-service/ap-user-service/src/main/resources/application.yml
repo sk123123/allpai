@@ -9,6 +9,13 @@ spring:
     username: root
     password: sk123123
     driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: true
+  devtools:
+    restart:
+      enabled: true
+      #监听目录
+#      additional-paths:
 #-------redis-------#
 #  redis:
 #    database: 0
@@ -48,4 +55,4 @@ ribbon:
   ConnectTimeout: 30000
 feign:
   hystrix:
-    enabled: true
+    enabled: false
