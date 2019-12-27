@@ -33,7 +33,7 @@
 		select count(*) from user_info
 	</select>
 
-	<select id="queryLookList" resultType="com.allpai.entity.dto.UserInfoLookDto">
+	<select id="queryLookList" resultType="com.allpai.entity.user.dto.UserInfoLookDto">
 		select ui.*,
 		(select count(*) from user_user_relation uu1 where uu1.user_id = ui.user_id and type = 1) lookNum,
 		uu.create_time createTime,
@@ -53,7 +53,7 @@
 		</if>
 	</select>
 
-	<select id="querybackList" resultType="com.allpai.entity.dto.UserInfoBackDto">
+	<select id="querybackList" resultType="com.allpai.entity.user.dto.UserInfoBackDto">
 		select *
 		from user_info ui where 1=1
 		<if test="userId != null">
@@ -74,7 +74,7 @@
 		</if>
 	</select>
 
-	<select id="queryUserInfoSelf" resultType="com.allpai.entity.dto.UserInfoSelfDto">
+	<select id="queryUserInfoSelf" resultType="com.allpai.entity.user.dto.UserInfoSelfDto">
 		select ui.*,
 		(select count(*) from user_user_relation uu1 where uu1.user_id = ui.user_id and type = 1) lookNum,
 		(select count(*) from user_user_relation uu2 where uu2.to_user_id = ui.user_id and type = 1) fansNum,
@@ -82,7 +82,7 @@
 		from user_info ui where ui.user_id = #{userId}
 	</select>
 
-	<select id="queryUserInfoOne" resultType="com.allpai.entity.dto.UserInfoOneDto">
+	<select id="queryUserInfoOne" resultType="com.allpai.entity.user.dto.UserInfoOneDto">
 		select ui.* ,
 		(select count(*) from user_user_relation uu1 where uu1.user_id = ui.user_id and type = 1) lookNum,
 		(select count(*) from user_user_relation uu2 where uu2.to_user_id = ui.user_id and type = 1) fansNum
@@ -228,7 +228,7 @@
 	</select>
 
 	<!-- 用户搜索-->
-	<select id="queryUserSearch" resultType="com.allpai.entity.dto.UserSearchDto">
+	<select id="queryUserSearch" resultType="com.allpai.entity.user.dto.UserSearchDto">
 		select ui.*
 		,(select count(*) from video_info vi where vi.user_id =ui.user_id and vi.see_auth = 1) workNum
 		,(select IFNULL(sum(good_num),0) from video_info vi where vi.user_id =ui.user_id and vi.see_auth = 1) goodNum

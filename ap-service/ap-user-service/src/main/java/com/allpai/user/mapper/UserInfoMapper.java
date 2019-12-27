@@ -1,11 +1,10 @@
 package com.allpai.user.mapper;
 
-import com.allpai.entity.dto.UserInfoLookDto;
+import com.allpai.entity.user.dto.UserInfoLookDto;
 import com.allpai.common.mapper.BaseMapper;
-import com.allpai.entity.dto.UserInfoOneDto;
-import com.allpai.entity.dto.UserInfoSelfDto;
-import com.allpai.entity.dto.UserSearchDto;
-import com.allpai.entity.user.SysMenuEntity;
+import com.allpai.entity.user.dto.UserInfoOneDto;
+import com.allpai.entity.user.dto.UserInfoSelfDto;
+import com.allpai.entity.user.dto.UserSearchDto;
 import com.allpai.entity.user.UserInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;

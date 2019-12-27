@@ -5,11 +5,12 @@ import com.allpai.common.utils.MsgInfo;
 import com.allpai.common.utils.PageUtils;
 import com.allpai.common.utils.R;
 import com.allpai.common.utils.SessionUtils;
-import com.allpai.entity.VideoInfoEntity;
-import com.allpai.entity.dto.VideoInfoDto;
-import com.allpai.entity.user.SysMenuEntity;
+import com.allpai.entity.common.vo.HomePageHotSearchInVo;
+import com.allpai.entity.common.vo.HomePageSearchInVo;
+import com.allpai.entity.video.VideoInfoEntity;
+import com.allpai.entity.video.dto.VideoInfoDto;
 import com.allpai.entity.user.UserInfoEntity;
-import com.allpai.entity.vo.*;
+import com.allpai.entity.video.vo.*;
 import com.allpai.video.mapper.VideoInfoMapper;
 import com.allpai.video.service.VideoInfoService;
 import com.allpai.video.service.VideoTopicService;
@@ -226,9 +227,31 @@ public class VideoInfoServiceImpl implements VideoInfoService {
         return R.ok(MsgInfo.成功.toString());
     }
 
+    /**
+     * 喜爱视频列表
+     * @param videoLikeListInVo
+     * @param request
+     * @return
+     */
     @Override
     public R likelist(VideoLikeListInVo videoLikeListInVo, HttpServletRequest request) {
-        return null;
+        Long userId = videoLikeListInVo.getUserId();
+        if(userId == null){
+            UserInfoEntity userInfoEntity = SessionUtils.getSessionUser(request);
+            userId = userInfoEntity.getUserId();
+            if(userId == null)return R.error(ErrorCode.TokenInvalid);
+        }
+        Integer page = videoLikeListInVo.getPage();
+        Integer limit = videoLikeListInVo.getLimit();
+        Map<String, Object> map = new HashMap<>();
+        map.put("offset", (page - 1) * limit);
+        map.put("limit", limit);
+        map.put("userId", userId);
+        //查询列表数据
+        List<VideoInfoDto> videoInfoList = videoInfoMapper.queryLikeList(map);
+        int total = videoInfoMapper.queryLikeTotal(map);
+        PageUtils pageUtil = new PageUtils(videoInfoList, total, limit, page);
+        return R.ok().put("page", pageUtil);
     }
 
     @Override

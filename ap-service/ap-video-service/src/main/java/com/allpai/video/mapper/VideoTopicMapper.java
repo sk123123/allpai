@@ -1,11 +1,11 @@
 package com.allpai.video.mapper;
 
 import com.allpai.common.mapper.BaseMapper;
-import com.allpai.entity.VideoTopicInfoEntity;
-import com.allpai.entity.dto.TopicInfoDetailDto;
-import com.allpai.entity.dto.VideoTopicInfoDto;
-import com.allpai.entity.vo.VideoHotTopicRankOutVo;
-import com.allpai.entity.vo.VideoTopicAddOutVo;
+import com.allpai.entity.video.VideoTopicInfoEntity;
+import com.allpai.entity.video.dto.TopicInfoDetailDto;
+import com.allpai.entity.video.dto.VideoTopicInfoDto;
+import com.allpai.entity.video.vo.VideoHotTopicRankOutVo;
+import com.allpai.entity.video.vo.VideoTopicAddOutVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

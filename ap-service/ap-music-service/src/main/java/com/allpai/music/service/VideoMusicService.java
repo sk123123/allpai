@@ -1,10 +1,10 @@
 package com.allpai.music.service;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.VideoMusicEntity;
-import com.allpai.entity.vo.MusicListInVo;
-import com.allpai.entity.vo.MusicSearchInVo;
-import com.allpai.entity.vo.MusicUploadInVo;
+import com.allpai.entity.music.VideoMusicEntity;
+import com.allpai.entity.music.vo.MusicListInVo;
+import com.allpai.entity.music.vo.MusicSearchInVo;
+import com.allpai.entity.music.vo.MusicUploadInVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

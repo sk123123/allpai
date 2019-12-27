@@ -2,8 +2,9 @@ package com.allpai.video.controller;
 
 import com.allpai.common.utils.PageUtils;
 import com.allpai.common.utils.R;
-import com.allpai.entity.VideoInfoEntity;
-import com.allpai.entity.vo.PageListInVo;
+import com.allpai.entity.user.vo.PageListInVo;
+import com.allpai.entity.video.VideoInfoEntity;
+import com.allpai.entity.video.vo.VideoHotnumInVo;
 import com.allpai.video.service.VideoInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +112,23 @@ public class VideoInfoController {
         videoInfoService.deleteBatch(videoIds);
 
         return R.ok();
+    }
+
+    /**
+     *视频点赞数
+     */
+    @ResponseBody
+    @RequestMapping("/getGoogNumTotal/{userId}")
+    public Long getGoogNumTotal(@PathVariable(value = "userId") Long  userId){
+        return videoInfoService.getGoogNumTotal(userId);
+    }
+
+    /**
+     *视频点赞数
+     */
+    @ResponseBody
+    @RequestMapping("/updateVideoHotnum")
+    public void updateVideoHotnum(@RequestBody VideoHotnumInVo videoHotnumInVo){
+        videoInfoService.updateVideoHotnum(videoHotnumInVo.getType(),videoHotnumInVo.getVideoId());
     }
 }

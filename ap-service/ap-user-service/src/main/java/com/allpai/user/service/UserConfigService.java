@@ -1,9 +1,8 @@
 package com.allpai.user.service;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.user.SysMenuEntity;
 import com.allpai.entity.user.UserConfigEntity;
-import com.allpai.entity.vo.UserSetNotifyInVo;
+import com.allpai.entity.user.vo.UserSetNotifyInVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

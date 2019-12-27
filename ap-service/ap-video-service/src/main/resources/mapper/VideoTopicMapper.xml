@@ -3,18 +3,18 @@
 
 <mapper namespace="com.allpai.video.mapper.VideoTopicMapper">
 
-	<select id="queryObject" resultType="com.allpai.entity.VideoTopicInfoEntity">
+	<select id="queryObject" resultType="com.allpai.entity.video.VideoTopicInfoEntity">
 		select * from video_topic where topic_id = #{value}
 	</select>
 	
-	<select id="queryObjectList" resultType="com.allpai.entity.vo.VideoHotTopicRankOutVo">
+	<select id="queryObjectList" resultType="com.allpai.entity.video.vo.VideoHotTopicRankOutVo">
 		select partake_num,topic_title,topic_id from video_topic order by hot_num
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
 	</select>
 
-	<select id="queryList" resultType="com.allpai.entity.VideoTopicInfoEntity">
+	<select id="queryList" resultType="com.allpai.entity.video.VideoTopicInfoEntity">
 		select * from video_topic 
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
@@ -28,7 +28,7 @@
 		select count(*) from video_topic where topic_title = #{topicTitle}
 	</select>
 	 
-	<insert id="save" parameterType="com.allpai.entity.VideoTopicInfoEntity" useGeneratedKeys="true" keyProperty="topicId">
+	<insert id="save" parameterType="com.allpai.entity.video.VideoTopicInfoEntity" useGeneratedKeys="true" keyProperty="topicId">
 		insert into video_topic
 		(
 			`topic_id`, 
@@ -55,7 +55,7 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.allpai.entity.VideoTopicInfoEntity">
+	<update id="update" parameterType="com.allpai.entity.video.VideoTopicInfoEntity">
 		update video_topic 
 		<set>
 			<if test="topicTitle != null">`topic_title` = #{topicTitle}, </if>
@@ -80,18 +80,18 @@
 		</foreach>
 	</delete>
 	
-	<select id="queryTopicTitleInfo" resultType="com.allpai.entity.dto.VideoTopicInfoDto">
+	<select id="queryTopicTitleInfo" resultType="com.allpai.entity.video.dto.VideoTopicInfoDto">
 		select *,ui.head_url headUrl,ui.nick_name nickName from video_topic vt left join user_info ui on vt.user_id = ui.user_id  where  topic_title = #{topicTitle}
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
 	</select>
 	
-	<select id="queryTopicInfo" resultType="com.allpai.entity.dto.TopicInfoDetailDto" >
+	<select id="queryTopicInfo" resultType="com.allpai.entity.video.dto.TopicInfoDetailDto" >
 		select *,ui.head_url headUrl,ui.nick_name nickName from video_topic vt left join user_info ui on vt.user_id = ui.user_id  where  topic_id = #{topicId}
 	</select>
 	
-	<select id="queryTopicTitleAddInfo" resultType="com.allpai.entity.vo.VideoTopicAddOutVo">
+	<select id="queryTopicTitleAddInfo" resultType="com.allpai.entity.video.vo.VideoTopicAddOutVo">
 		select  topic_id topicId,partake_num partakeNum  from video_topic where topic_title = #{topicTitle}
 	</select>
 	

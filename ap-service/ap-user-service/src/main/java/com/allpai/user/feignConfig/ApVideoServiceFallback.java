@@ -1,6 +1,6 @@
 package com.allpai.user.feignConfig;
 
-import com.allpai.entity.VideoInfoEntity;
+import com.allpai.entity.video.VideoInfoEntity;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 

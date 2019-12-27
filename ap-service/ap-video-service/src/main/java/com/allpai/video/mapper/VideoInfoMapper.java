@@ -1,13 +1,13 @@
 package com.allpai.video.mapper;
 
 import com.allpai.common.mapper.BaseMapper;
-import com.allpai.entity.VideoInfoEntity;
-import com.allpai.entity.dto.VideoInfoDto;
-import com.allpai.entity.dto.VideoTopicInfoDto;
-import com.allpai.entity.vo.ComprehensiveSearchOutVo;
-import com.allpai.entity.vo.HomePageHotSearchOutVo;
-import com.allpai.entity.vo.TopicSearchOutVo;
-import com.allpai.entity.vo.VideoSearchOutVo;
+import com.allpai.entity.video.VideoInfoEntity;
+import com.allpai.entity.video.dto.VideoInfoDto;
+import com.allpai.entity.video.dto.VideoTopicInfoDto;
+import com.allpai.entity.common.vo.ComprehensiveSearchOutVo;
+import com.allpai.entity.common.vo.HomePageHotSearchOutVo;
+import com.allpai.entity.video.vo.TopicSearchOutVo;
+import com.allpai.entity.video.vo.VideoSearchOutVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

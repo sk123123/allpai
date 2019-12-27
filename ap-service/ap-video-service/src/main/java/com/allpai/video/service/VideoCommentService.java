@@ -1,11 +1,11 @@
 package com.allpai.video.service;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.VideoCommentEntity;
-import com.allpai.entity.vo.UserCommentDeleteInVo;
-import com.allpai.entity.vo.UserCommentListInVo;
-import com.allpai.entity.vo.VideoCommentAddInVo;
-import com.allpai.entity.vo.VideoCommentListInVo;
+import com.allpai.entity.video.VideoCommentEntity;
+import com.allpai.entity.user.vo.UserCommentDeleteInVo;
+import com.allpai.entity.user.vo.UserCommentListInVo;
+import com.allpai.entity.video.vo.VideoCommentAddInVo;
+import com.allpai.entity.video.vo.VideoCommentListInVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

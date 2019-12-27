@@ -1,7 +1,11 @@
 package com.allpai.user.controller.app;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.vo.*;
+import com.allpai.entity.common.vo.SendCodeInVo;
+import com.allpai.entity.user.vo.UserAuthLoginInVo;
+import com.allpai.entity.user.vo.UserFindPwdInVo;
+import com.allpai.entity.user.vo.UserInfoRegInVo;
+import com.allpai.entity.user.vo.UserLoginInVo;
 import com.allpai.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

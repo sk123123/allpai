@@ -1,8 +1,10 @@
 package com.allpai.user.service;
 
 import com.allpai.common.utils.R;
+import com.allpai.entity.common.vo.SendCodeInVo;
+import com.allpai.entity.common.vo.SendCodeInfoInVo;
 import com.allpai.entity.user.UserInfoEntity;
-import com.allpai.entity.vo.*;
+import com.allpai.entity.user.vo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -58,6 +60,6 @@ public interface UserInfoService {
 
     R blacklist(PageListInVo userBackListInVo ,HttpServletRequest request);
 
-    R deleteBlackListInfo(UserDeleteBlackListInfoInVo userDeleteBlackListInfoInVo,HttpServletRequest request);
+    R deleteBlackListInfo(UserDeleteBlackListInfoInVo userDeleteBlackListInfoInVo, HttpServletRequest request);
 
 }

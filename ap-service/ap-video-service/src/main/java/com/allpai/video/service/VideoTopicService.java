@@ -1,8 +1,8 @@
 package com.allpai.video.service;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.VideoTopicInfoEntity;
-import com.allpai.entity.vo.*;
+import com.allpai.entity.video.VideoTopicInfoEntity;
+import com.allpai.entity.video.vo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

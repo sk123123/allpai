@@ -3,11 +3,11 @@
 
 <mapper namespace="com.allpai.video.mapper.VideoInfoMapper">
 
-	<select id="queryObject" resultType="com.allpai.entity.VideoInfoEntity">
+	<select id="queryObject" resultType="com.allpai.entity.video.VideoInfoEntity">
 		select * from video_info where video_id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.allpai.entity.VideoInfoEntity">
+	<select id="queryList" resultType="com.allpai.entity.video.VideoInfoEntity">
 		select * from video_info where 1=1
 		<if test="storeType != null ">
 			and store_type =#{storeType}
@@ -34,14 +34,14 @@
 		</if>
 	</select>
 
-	<select id="queryListByVideoIds" resultType="com.allpai.entity.VideoInfoEntity">
+	<select id="queryListByVideoIds" resultType="com.allpai.entity.video.VideoInfoEntity">
 		select * from video_info where video_id in
 		<foreach item="videoId" collection="array" open="(" separator="," close=")">
 			#{videoId}
 		</foreach>
 	</select>
 
-	<select id="queryLikeList" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryLikeList" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		  select vi.* ,
 		  IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id),0) commentNum
 		  from user_video_relation uv left join video_info vi on uv.video_id = vi.video_id
@@ -61,7 +61,7 @@
 
 
 	<!-- 查找关注视频列表-->
-	<select id="queryLooklist" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryLooklist" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -87,7 +87,7 @@
 	</select>
 
 	<!-- 查找热门视频列表 -->
-	<select id="queryHotlist" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryHotlist" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -105,7 +105,7 @@
 	</select>
 
 	<!-- 查找普通视频列表 -->
-	<select id="queryCommonList" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryCommonList" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -123,7 +123,7 @@
 	</select>
 
 	<!-- 查找最新视频列表 -->
-	<select id="queryNewList" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryNewList" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -141,7 +141,7 @@
 	</select>
 
 	<!-- 根据时间查询视频列表 -->
-	<select id="queryTimeList" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryTimeList" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -171,7 +171,7 @@
 		</if>
 	</select>
 
-	<select id="queryVideoShareInfo" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryVideoShareInfo" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -187,7 +187,7 @@
 		</if>
 	</select>
 
-	<select id="queryVideoDetailInfo" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryVideoDetailInfo" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -197,7 +197,7 @@
 		from video_info vi left join user_info ui on ui.user_id = vi.user_id where vi.video_id = #{videoId}
 	</select>
 
-	<insert id="save" parameterType="com.allpai.entity.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoId">
+	<insert id="save" parameterType="com.allpai.entity.video.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoId">
 		insert into video_info
 		(
 			`user_id`,
@@ -236,7 +236,7 @@
 		)
 	</insert>
 
-	<insert id="saveBase" parameterType="com.allpai.entity.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoId">
+	<insert id="saveBase" parameterType="com.allpai.entity.video.VideoInfoEntity" useGeneratedKeys="true" keyProperty="videoId">
 		insert into video_info
 		(
 			`user_id`,
@@ -271,7 +271,7 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.allpai.entity.VideoInfoEntity">
+	<update id="update" parameterType="com.allpai.entity.video.VideoInfoEntity">
 		update video_info
 		<set>
 			<if test="userId != null">`user_id` = #{userId}, </if>
@@ -290,7 +290,7 @@
 		where video_id = #{videoId}
 	</update>
 
-	<update id="updateByVod" parameterType="com.allpai.entity.VideoInfoEntity">
+	<update id="updateByVod" parameterType="com.allpai.entity.video.VideoInfoEntity">
 		update video_info
 		<set>
 			<if test="userId != null">`user_id` = #{userId}, </if>
@@ -324,7 +324,7 @@
 		select IFNULL(sum(good_num),0) from video_info where user_id =#{userId};
 	</select>
 
-	<select id="queryTopicVideoList" resultType="com.allpai.entity.dto.VideoTopicInfoDto">
+	<select id="queryTopicVideoList" resultType="com.allpai.entity.video.dto.VideoTopicInfoDto">
 		<!-- select * from video_info where topic_id = #{topicId} -->
 		select t1.video_id videoId,t1.topic_id topicId,t1.user_id userId, t1.cover cover,t1.good_num goodNum,t1.hot_num hotNum,t1.video_url videoUrl,t1.create_time createTime
 		from video_info t1
@@ -345,7 +345,7 @@
 	</select>
 
 	<!-- 视频搜索 -->
-	<select id="queryVideoSearchList" resultType="com.allpai.entity.vo.VideoSearchOutVo">
+	<select id="queryVideoSearchList" resultType="com.allpai.entity.video.vo.VideoSearchOutVo">
 		select vi.*,
 		ui.nick_name nickName,ui.head_url headUrl,
 		<if test="userId != null ">
@@ -385,7 +385,7 @@
 
 
 	<!-- 根据输入标题对话题搜索 -->
-	<select id="queryTopicSearchOutVo" resultType="com.allpai.entity.vo.TopicSearchOutVo">
+	<select id="queryTopicSearchOutVo" resultType="com.allpai.entity.video.vo.TopicSearchOutVo">
 		select topic_id topicId,topic_title topicTitle ,partake_num partakeNum
 		from video_topic where topic_title like concat ('%' ,#{content}, '%')
 		<if test="offset != null and limit != null">
@@ -398,7 +398,7 @@
 	</select>
 
 	<!-- 查找范围视频列表 -->
-	<select id="queryRangeList" resultType="com.allpai.entity.dto.VideoInfoDto">
+	<select id="queryRangeList" resultType="com.allpai.entity.video.dto.VideoInfoDto">
 		select *,
 		IFNULL((select count(comment_id) from video_comment vc where vc.video_id = vi.video_id and vc.parent_id = 0),0) commentNum,
 		IFNULL(ui.nick_name,'') nickName,IFNULL(ui.head_url,'') headUrl,
@@ -416,7 +416,7 @@
 	</select>
 
 	<!--  主页热词搜索 -->
-	<select id="queryHomePageHotSearchOutVo" resultType="com.allpai.entity.vo.HomePageHotSearchOutVo">
+	<select id="queryHomePageHotSearchOutVo" resultType="com.allpai.entity.common.vo.HomePageHotSearchOutVo">
 		select search_word  content from user_search_word where  search_word  like concat ('%' ,#{content}, '%')
 		order by hot_num  desc
 		<if test="offset != null and limit != null">
@@ -425,7 +425,7 @@
 	</select>
 
 	<!-- 查询此用户ID是否参与话题-->
-	<select id="findVideobyTopicUserId"  resultType="com.allpai.entity.VideoInfoEntity">
+	<select id="findVideobyTopicUserId"  resultType="com.allpai.entity.video.VideoInfoEntity">
 		select  *  from video_info where user_id = #{userId} and topic_id = #{topicId} limit 0,1;
 	</select>
 

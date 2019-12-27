@@ -1,7 +1,7 @@
 package com.allpai.video.controller.app;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.vo.VideoHotListInVo;
+import com.allpai.entity.video.vo.VideoHotListInVo;
 import com.allpai.video.service.VideoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

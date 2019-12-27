@@ -1,8 +1,8 @@
 package com.allpai.user.service.impl;
 
-import com.allpai.entity.vo.UserAuthLoginInVo;
-import com.allpai.entity.vo.UserInfoRegInVo;
-import com.allpai.entity.vo.UserInfoUpateInVo;
+import com.allpai.entity.user.vo.UserAuthLoginInVo;
+import com.allpai.entity.user.vo.UserInfoRegInVo;
+import com.allpai.entity.user.vo.UserInfoUpateInVo;
 import com.allpai.user.service.UserNickNameJudgeService;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,8 @@
 package com.allpai.user.controller.app;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.vo.UserSetNotifyInVo;
+import com.allpai.entity.user.vo.UserSetNotifyInVo;
+import com.allpai.entity.video.vo.VideoLikeNotifiyInVo;
 import com.allpai.user.service.UserConfigService;
 import com.allpai.user.service.impl.UserConfigServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,25 @@ public class AppUserConfigController {
     public void  videoLikeNotifiy(@PathVariable Long videoId){
 //        userConfigServiceImpl.videoLikeNotifiy(videoId,"java");
         userConfigService.videoLikeNotifiy(videoId,"java");
+    }
+
+    /**
+     * 视频点赞通知
+     */
+    @ResponseBody
+    @RequestMapping("/videoLikeNotifiy")
+    void videoLikeNotifiy(@RequestBody VideoLikeNotifiyInVo videoLikeNotifiyInVo){
+        Long videoId = videoLikeNotifiyInVo.getVideoId();
+        String nickName = videoLikeNotifiyInVo.getNickName();
+        userConfigService.videoLikeNotifiy(videoId,nickName);
+    }
+
+    /**
+     * 视频评论通知
+     */
+    @ResponseBody
+    @RequestMapping("/commentNotifiy")
+    void commentNotifiy(@RequestBody Long commentId,@RequestBody String nickName){
+        userConfigService.commentNotifiy(commentId,nickName);
     }
 }

@@ -1,8 +1,8 @@
 package com.allpai.user.service;
 
-import com.allpai.entity.vo.UserAuthLoginInVo;
-import com.allpai.entity.vo.UserInfoRegInVo;
-import com.allpai.entity.vo.UserInfoUpateInVo;
+import com.allpai.entity.user.vo.UserAuthLoginInVo;
+import com.allpai.entity.user.vo.UserInfoRegInVo;
+import com.allpai.entity.user.vo.UserInfoUpateInVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

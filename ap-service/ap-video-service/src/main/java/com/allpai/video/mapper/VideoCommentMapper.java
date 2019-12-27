@@ -1,10 +1,10 @@
 package com.allpai.video.mapper;
 
 import com.allpai.common.mapper.BaseMapper;
-import com.allpai.entity.VideoCommentEntity;
-import com.allpai.entity.dto.UserCommentDto;
-import com.allpai.entity.dto.VCommentSonDto;
-import com.allpai.entity.dto.VideoCommentDto;
+import com.allpai.entity.video.VideoCommentEntity;
+import com.allpai.entity.user.dto.UserCommentDto;
+import com.allpai.entity.video.dto.VCommentSonDto;
+import com.allpai.entity.video.dto.VideoCommentDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

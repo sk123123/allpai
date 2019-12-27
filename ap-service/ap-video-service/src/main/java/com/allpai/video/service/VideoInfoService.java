@@ -1,8 +1,10 @@
 package com.allpai.video.service;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.VideoInfoEntity;
-import com.allpai.entity.vo.*;
+import com.allpai.entity.common.vo.HomePageHotSearchInVo;
+import com.allpai.entity.common.vo.HomePageSearchInVo;
+import com.allpai.entity.video.VideoInfoEntity;
+import com.allpai.entity.video.vo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -49,11 +51,11 @@ public interface VideoInfoService {
 
     void updateVideoHotnum(int type,Long videoId);
 
-    R findTopicVideoList(VideoTopicFindListInVo videoTopicFindListInVo,HttpServletRequest request);
+    R findTopicVideoList(VideoTopicFindListInVo videoTopicFindListInVo, HttpServletRequest request);
 
     R findVcaData(VideoVcaInVo videoVcaInVo);
 
-    R homePageSearch(HomePageSearchInVo homePageSearchInVo,HttpServletRequest request);
+    R homePageSearch(HomePageSearchInVo homePageSearchInVo, HttpServletRequest request);
 
     R homePageHotSearch(HomePageHotSearchInVo homePageHotSearchInVo, HttpServletRequest request);
 }

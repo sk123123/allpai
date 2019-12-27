@@ -1,6 +1,8 @@
 package com.allpai.user.controller.app;
 
 import com.allpai.common.utils.R;
+import com.allpai.entity.common.vo.SendCodeInfoInVo;
+import com.allpai.entity.user.vo.*;
 import com.allpai.entity.vo.*;
 import com.allpai.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class AppUserInfoController {
      */
     @ResponseBody
     @RequestMapping("/sendCodeInfo")
-    public R sendCodeInfo(@RequestBody SendCodeInfoInVo sendCodeInfoInVo,HttpServletRequest request){
+    public R sendCodeInfo(@RequestBody SendCodeInfoInVo sendCodeInfoInVo, HttpServletRequest request){
         return userInfoService.sendCodeInfoInVo(sendCodeInfoInVo, request);
     }
 
@@ -45,7 +47,7 @@ public class AppUserInfoController {
      */
     @ResponseBody
     @RequestMapping("/updateInfo")
-    public R updateInfo(@RequestBody UserInfoUpateInVo userInfoUpateInVo,HttpServletRequest request){
+    public R updateInfo(@RequestBody UserInfoUpateInVo userInfoUpateInVo, HttpServletRequest request){
         return userInfoService.updateInfo(userInfoUpateInVo,request);
     }
 

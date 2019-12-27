@@ -1,8 +1,8 @@
 package com.allpai.video.controller.app;
 
 import com.allpai.common.utils.R;
-import com.allpai.entity.vo.VideoTopicAddInVo;
-import com.allpai.entity.vo.VideoTopicFindInfoOutVo;
+import com.allpai.entity.video.vo.VideoTopicAddInVo;
+import com.allpai.entity.video.vo.VideoTopicFindInfoOutVo;
 import com.allpai.video.service.VideoTopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

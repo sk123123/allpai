@@ -1,7 +1,7 @@
 package com.allpai.user.service.impl;
 
 import com.allpai.user.ApUserApplication;
-import com.allpai.entity.vo.UserInfoRegInVo;
+import com.allpai.entity.user.vo.UserInfoRegInVo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

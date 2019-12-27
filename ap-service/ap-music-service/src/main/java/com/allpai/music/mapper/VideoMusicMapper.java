@@ -1,7 +1,7 @@
 package com.allpai.music.mapper;
 
 import com.allpai.common.mapper.BaseMapper;
-import com.allpai.entity.dto.VideoMusicDto;
+import com.allpai.entity.music.dto.VideoMusicDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
