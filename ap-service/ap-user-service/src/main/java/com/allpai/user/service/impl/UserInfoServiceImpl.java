@@ -98,9 +98,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         //密码
         if(StringUtils.isBlank(userInfoRegInVo.getPassword()))
             return R.error(ErrorCode.ParamInvalid.getCode(),"password参数不能空");
-        String password =
-                userInfoRegInVo.getPassword();
-//        AESUtils.decryptData(userInfoRegInVo.getPassword());//base64解密
+        String password = userInfoRegInVo.getPassword();
+        password = AESUtils.decryptData(password);//base64解密
         if (StringUtils.isEmpty(password) || !Pattern.matches("^[a-z0-9A-Z]{8,16}$", password)) {
             return R.error(ErrorCode.InfoError.getCode(), "请输入8~16位字母或数字");
         }
@@ -207,9 +206,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(StringUtils.isBlank(userLoginInVo.getPassword()))
             return R.error(ErrorCode.ParamInvalid.getCode(),"password参数不能为空");
         String password = userLoginInVo.getPassword();
-//                AESUtils.decryptData(userLoginInVo.getPassword());
         if(password == null)
             return  R.error(ErrorCode.ParamInvalid.getCode(),"password参数无效");
+        password= AESUtils.decryptData(password);
         if(StringUtils.isBlank(userLoginInVo.getJpushId()))
             return  R.error(ErrorCode.ParamInvalid.getCode(),"jpushId参数不能为空");
         UserInfoEntity userEntity = getSingUserInfoEntity(userLoginInVo.getMobile(),null,null,null,null);
@@ -220,8 +219,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(userLockInfoService.judgeIsLock(userEntity.getUserId())){
             return R.error(ErrorCode.InfoError.getCode(),"账号已被锁定,请24小时后再试");
         }
-//DataUtils.getMd5(password)
-        if(!userEntity.getPassword().equals(password)){
+        if(!userEntity.getPassword().equals(DataUtils.getMd5(password))){
             int longErrorNum = getLoginError(request);
             longErrorNum ++ ;
             countLoginError(request, userEntity.getUserId(),longErrorNum);
@@ -543,8 +541,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         if(toUserId == null){
             isMySelf = true;
         }
+        if(!isLogin)return R.error(ErrorCode.TokenInvalid);
         if(isMySelf){
-            if(!isLogin)return R.error(ErrorCode.TokenInvalid);
             //获取自己的信息
             UserInfoSelfDto userInfo = userInfoMapper.queryUserInfoSelf(userId);
             userInfo.setCommentNew(videoFeignClient.findCommentNoReadNum(userId));
@@ -587,9 +585,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         return null;
     }
 
+    //登出
     @Override
     public R exit(HttpServletRequest request) {
-        return null;
+        HttpSession session = request.getSession();
+        session.invalidate();
+        //减少在线人数
+        OnlineUserListener.removeOnline(request);
+        return R.ok(MsgInfo.成功.toString());
     }
 
     @Override

@@ -3,12 +3,12 @@ package com.allpai.user.controller.app;
 import com.allpai.common.utils.R;
 import com.allpai.entity.common.vo.SendCodeInfoInVo;
 import com.allpai.entity.user.vo.*;
-import com.allpai.entity.vo.*;
 import com.allpai.user.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/12/12 0012 14:33
  * 用户信息表
  */
+@RestController
+@RequestMapping("app/user")
 public class AppUserInfoController {
     @Autowired
     private UserInfoService userInfoService;
