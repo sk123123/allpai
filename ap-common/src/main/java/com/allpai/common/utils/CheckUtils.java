@@ -23,6 +23,20 @@ public class CheckUtils {
     }
 
     /**
+     * 验证QQ号码
+     * @param QQ true 符合   false 不符合
+     * @return
+     */
+    public static boolean checkQQ(String QQ) {
+        String regex = "^[1-9][0-9]{4,} $";
+        if (Pattern.matches(regex, QQ)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * 检查参数是否符合规范
      * @param param 参数
      * @param checkArray 检查的数组值
