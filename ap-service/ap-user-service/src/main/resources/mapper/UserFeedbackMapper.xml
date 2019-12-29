@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allpai.user.mapper.UserFeedbackMapper">
+
+	<select id="queryObject" resultType="com.allpai.entity.user.UserFeedbackEntity">
+		select * from user_feedback where feedback_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.allpai.entity.user.UserFeedbackEntity">
+		select * from user_feedback 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from user_feedback 
+	</select>
+	 
+	<insert id="save" parameterType="com.allpai.entity.user.UserFeedbackEntity" useGeneratedKeys="true" keyProperty="feedbackId">
+		insert into user_feedback
+		(
+			`user_id`, 
+			`content`, 
+			`contact`, 
+			`img_path`, 
+			`create_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{content}, 
+			#{contact}, 
+			#{imgPath}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.allpai.entity.user.UserFeedbackEntity">
+		update user_feedback 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="contact != null">`contact` = #{contact}, </if>
+			<if test="imgPath != null">`img_path` = #{imgPath}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where feedback_id = #{feedbackId}
+	</update>
+	
+	<delete id="delete">
+		delete from user_feedback where feedback_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from user_feedback where feedback_id in 
+		<foreach item="feedbackId" collection="array" open="(" separator="," close=")">
+			#{feedbackId}
+		</foreach>
+	</delete>
+
+</mapper>
